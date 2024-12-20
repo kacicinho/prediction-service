@@ -1,0 +1,39 @@
+name: CI Workflow
+
+# Define when this workflow should run (e.g., on push, pull request, or on a schedule)
+on:
+  push:
+    branches:
+      - main   # Runs on push to main branch
+  pull_request:
+    branches:
+      - main   # Runs on pull request to main branch
+
+# Define the jobs that will run in this workflow
+jobs:
+  build:
+    runs-on: ubuntu-latest   # Runner environment (Ubuntu in this case)
+
+    steps:
+      # Step 1: Checkout the code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Python (specify version)
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'  # Change to your preferred version
+
+      # Step 3: Install dependencies (from requirements.txt)
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Step 4: Run tests (using pytest)
+      - name: Run tests
+        run: |
+          pytest tests/ --maxfail=1 --disable-warnings -q  # Run tests from the `tests/` directory
+
+      # Optional: St
